@@ -1,34 +1,64 @@
 import math
 
 def main():
+    mode = input("Enter 1 for player vs player. Enter 2 for player vs Min-Max: ")
     board = make_board()
     print_board(board)
 
     turn_counter = 0
 
-    while not check_win(board):
-        if turn_counter % 2 == 0:
-            player = "X"
-        else:
-            player = "O"
-        location = input("Enter a location (1-9) on where to move (Board is top to bottom, left to right): ")
-        row,col = switch_case(location)
-        valid = check_full(board, row, col)
-        if not valid:
-            board[row][col] = player
-            turn_counter = turn_counter + 1
-            print_board(board)
-            check_win(board)
-            if turn_counter == 9 and not check_win(board):
-                print("Tie game!")
-                break
-            if player == "X":
-                print("Best move for 'O' is: ")
-                print(reverse_switch(find_best_move(board)))
-        else:
-            print("Sorry that spot is full. Please enter an empty location.")
-    if check_win(board):
-        print("Congrates! Player", player)
+    if int(mode) == 1:
+        while not check_win(board):
+            if turn_counter % 2 == 0:
+                player = "X"
+            else:
+                player = "O"
+            location = input("Enter a location (1-9) on where to move (Board is top to bottom, left to right): ")
+            row,col = switch_case(location)
+            valid = check_full(board, row, col)
+            if not valid:
+                board[row][col] = player
+                turn_counter = turn_counter + 1
+                print_board(board)
+                check_win(board)
+                if turn_counter == 9 and not check_win(board):
+                    print("Tie game!")
+                    break
+            else:
+                print("Sorry that spot is full. Please enter an empty location.")
+        if check_win(board):
+            print("Congrates! Player", player, "Won!")
+
+    if int(mode) == 2:
+        while not check_win(board):
+            if turn_counter % 2 == 0:
+                player = "X"
+            else:
+                player = "O"
+            location = input("Enter a location (1-9) on where to move (Board is top to bottom, left to right): ")
+            row,col = switch_case(location)
+            valid = check_full(board, row, col)
+            if not valid:
+                board[row][col] = player
+                turn_counter = turn_counter + 1
+                print_board(board)
+                if check_win(board):
+                    print("Congrates! You Won!")
+                if turn_counter == 9 and not check_win(board):
+                    print("Tie game!")
+                    break
+                if player == "X":
+                    move = find_best_move(board)
+                    row = move[0]
+                    col = move[1]
+                    board[row][col] = "O"
+                    turn_counter = turn_counter + 1
+                    print("Min-Max Move: ")
+                    print_board(board)
+                    if check_win(board):
+                        print("Min-Max Wins!")
+            else:
+                print("Sorry that spot is full. Please enter an empty location.")
 
 
 # Java type switch case method used to turn number input into row and column output
